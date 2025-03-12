@@ -6,5 +6,5 @@ Solved using modified A*. Set nodes to include the entire state (position, speed
 Possible improvements:
 1. Improve heuristic to penalise high speed near goal
 2. Improve memory and time efficiency by giving partial map to each segment
-3. Refactor and clean the main a* function
+3. Refactor and add comments to the main a* function
 4. Make null value fail-safes
