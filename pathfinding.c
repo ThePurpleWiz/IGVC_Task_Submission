@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-#define MAX_SPEED 3
+#include <math.h>
 
 enum Direction{
     North,
@@ -27,7 +26,7 @@ struct ListNode
     struct ListNode *next;
 };
 
-int width = 0, height = 0;
+int width = 0, height = 0, globalMaxSpeed = 3;
 
 void printMap(int map[height][width]){
     for (int i = 0; i < height; i++)
@@ -82,7 +81,7 @@ int getNeighbouringNodes(struct Node *currNode, struct Node neighbours[45], int 
     struct Position newPos;
     int counter = 0;
     int minSpeed = 0 > ((currNode->speed)-1) ? 0 : ((currNode->speed)-1);
-    int maxSpeed = ((currNode->speed)+1) < MAX_SPEED ? ((currNode->speed)+1) : MAX_SPEED;
+    int maxSpeed = ((currNode->speed)+1) < globalMaxSpeed ? ((currNode->speed)+1) : globalMaxSpeed;
     for (int currSpeed = minSpeed; currSpeed <= maxSpeed; currSpeed++)
     {
         for (int i = -1; i <= 1; i++)
@@ -138,7 +137,7 @@ struct Node aStar(struct Node startNode, int map[height][width], int numGoals, s
     int ****gScore = malloc(height * sizeof(int***));
     int ****fScore = malloc(height * sizeof(int***));
     int ****hScore = malloc(height * sizeof(int***));
-    struct Node cameFrom[height][width][MAX_SPEED+1][4];
+    struct Node cameFrom[height][width][globalMaxSpeed+1][4];
 
     struct Node nullNode = {(struct Position){-1, -1}, 0, 0};
 
@@ -149,10 +148,10 @@ struct Node aStar(struct Node startNode, int map[height][width], int numGoals, s
         hScore[i] = malloc(width * sizeof(int**));
         for (int j = 0; j < width; j++)
         {
-            gScore[i][j] = malloc((MAX_SPEED+1) * sizeof(int*));
-            fScore[i][j] = malloc((MAX_SPEED+1) * sizeof(int*));
-            hScore[i][j] = malloc((MAX_SPEED+1) * sizeof(int*));
-            for (int s = 0; s <= MAX_SPEED; s++)
+            gScore[i][j] = malloc((globalMaxSpeed+1) * sizeof(int*));
+            fScore[i][j] = malloc((globalMaxSpeed+1) * sizeof(int*));
+            hScore[i][j] = malloc((globalMaxSpeed+1) * sizeof(int*));
+            for (int s = 0; s <= globalMaxSpeed; s++)
             {
                 gScore[i][j][s] = malloc(4 * sizeof(int*));
                 fScore[i][j][s] = malloc(4 * sizeof(int*));
@@ -211,7 +210,7 @@ struct Node aStar(struct Node startNode, int map[height][width], int numGoals, s
             {
                 for (int j = 0; j < width; j++)
                 {
-                    for (int s = 0; s <= MAX_SPEED; s++)
+                    for (int s = 0; s <= globalMaxSpeed; s++)
                     {
                         free(gScore[i][j][s]);
                         free(fScore[i][j][s]);
@@ -360,6 +359,8 @@ int main(){
             }
         }
     }
+
+    globalMaxSpeed = sqrt((height>width?height:width));
 
     struct Node goals[6];
     struct Node reached;
