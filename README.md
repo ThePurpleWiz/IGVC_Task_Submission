@@ -8,3 +8,4 @@ Possible improvements:
 2. Improve memory and time efficiency by giving partial map to each segment
 3. Refactor and add comments to the main a* function
 4. Make null value fail-safes
+5. (potential, need to check and see if it helps) change f score calculation to account for squared heuristic
