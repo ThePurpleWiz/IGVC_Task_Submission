@@ -198,6 +198,34 @@ struct Node aStar(struct Node startNode, int map[height][width], int numGoals, s
             }
             printf("\n\nNumber of Steps = %d\n\n", numSteps);
             printMap(map);
+
+            while(openSet->next != NULL){
+                struct ListNode *temp;
+                temp = openSet;
+                openSet = openSet->next;
+                free(temp);
+            }
+            free(openSet);
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    for (int s = 0; s <= MAX_SPEED; s++)
+                    {
+                        free(gScore[i][j][s]);
+                        free(fScore[i][j][s]);
+                        free(hScore[i][j][s]);
+                    } 
+                    free(gScore[i][j]);
+                    free(fScore[i][j]);
+                    free(hScore[i][j]);
+                }
+                free(gScore[i]);
+                free(fScore[i]);
+                free(hScore[i]);
+            }
+
             return reached;
         }
         struct ListNode *toFree = openSet;
